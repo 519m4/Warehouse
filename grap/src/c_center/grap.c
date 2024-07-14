@@ -9,7 +9,9 @@ int main()
     printf("3. Rainbow Gradient\n");
     printf("4. XOR Fractal\n");
     printf("5. RGB!\n");
-    printf("Enter your choice (1-5): ");
+    printf("6. XOR Fractal 2\n");
+    printf("7. XOR Fractal 3\n");
+    printf("grap> ");
     scanf("%d", &e);
     switch (e) {
     case 1:
@@ -26,6 +28,12 @@ int main()
         break;
     case 5:
         graphic5();//RGB!
+        break;
+    case 6: 
+        graphic6();//XOR fractal type2
+        break;
+    case 7:
+        graphic7();//XOR fractal type3
         break;
     default:
         break;

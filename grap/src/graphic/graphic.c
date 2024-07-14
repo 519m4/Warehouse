@@ -263,3 +263,99 @@ DWORD WINAPI graphic5()
 	}
 
 }
+
+DWORD WINAPI graphic6() {
+	HDC hdc = GetDC(NULL);
+	HDC hdcCopy = CreateCompatibleDC(hdc);
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+	BITMAPINFO bmpi = { 0 };
+	HBITMAP bmp;
+	bmpi.bmiHeader.biSize = sizeof(bmpi);
+	bmpi.bmiHeader.biWidth = screenWidth;
+	bmpi.bmiHeader.biHeight = screenHeight;
+	bmpi.bmiHeader.biPlanes = 1;
+	bmpi.bmiHeader.biBitCount = 32;
+	bmpi.bmiHeader.biCompression = BI_RGB;
+	RGBQUAD* rgbquad = NULL;
+	HSL hslcolor;
+	bmp = CreateDIBSection(hdc, &bmpi, DIB_RGB_COLORS, (void**)&rgbquad, NULL, 0);
+	SelectObject(hdcCopy, bmp);
+	INT i = 0;
+	while (1)
+	{
+		hdc = GetDC(NULL);
+		StretchBlt(hdcCopy, 0, 0, screenWidth, screenHeight, hdc, 0, 0, screenWidth, screenHeight, SRCCOPY);
+		RGBQUAD rgbquadCopy;
+
+		for (int x = 0; x < screenWidth; x++)
+		{
+			for (int y = 0; y < screenHeight; y++)
+			{
+				int index = y * screenWidth + x;
+				INT fx = (x | y) + i;
+
+				rgbquadCopy = rgbquad[fx];
+
+				hslcolor = rgb2hsl(rgbquadCopy);
+				hslcolor.h = fmod(fx / 300.f + y / screenHeight * .10f, 1.f);
+
+				rgbquad[index] =hsl2rgb(hslcolor);
+			}
+		}
+
+		i++;
+
+		StretchBlt(hdc, 0, 0, screenWidth, screenHeight, hdcCopy, 0, 0, screenWidth, screenHeight, SRCCOPY);
+		ReleaseDC(NULL, hdc);
+		DeleteDC(hdc);
+	}
+}
+
+DWORD WINAPI graphic7() {
+	HDC hdc = GetDC(NULL);
+	HDC hdcCopy = CreateCompatibleDC(hdc);
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+	BITMAPINFO bmpi = { 0 };
+	HBITMAP bmp;
+	bmpi.bmiHeader.biSize = sizeof(bmpi);
+	bmpi.bmiHeader.biWidth = screenWidth;
+	bmpi.bmiHeader.biHeight = screenHeight;
+	bmpi.bmiHeader.biPlanes = 1;
+	bmpi.bmiHeader.biBitCount = 32;
+	bmpi.bmiHeader.biCompression = BI_RGB;
+	RGBQUAD* rgbquad = NULL;
+	HSL hslcolor;
+	bmp = CreateDIBSection(hdc, &bmpi, DIB_RGB_COLORS, (void**)&rgbquad, NULL, 0);
+	SelectObject(hdcCopy, bmp);
+	INT i = 0;
+	while (1)
+	{
+		hdc = GetDC(NULL);
+		StretchBlt(hdcCopy, 0, 0, screenWidth, screenHeight, hdc, 0, 0, screenWidth, screenHeight, SRCCOPY);
+		RGBQUAD rgbquadCopy;
+
+		for (int x = 0; x < screenWidth; x++)
+		{
+			for (int y = 0; y < screenHeight; y++)
+			{
+				int index = y * screenWidth + x;
+				INT fx = (x ^ y) + i;
+
+				rgbquadCopy = rgbquad[fx];
+
+				hslcolor = rgb2hsl(rgbquadCopy);
+				hslcolor.h = fmod(fx / 300.f + y / screenHeight * .10f, 1.f);
+
+				rgbquad[index] = hsl2rgb(hslcolor);
+			}
+		}
+
+		i++;
+
+		StretchBlt(hdc, 0, 0, screenWidth, screenHeight, hdcCopy, 0, 0, screenWidth, screenHeight, SRCCOPY);
+		ReleaseDC(NULL, hdc);
+		DeleteDC(hdc);
+	}
+}
